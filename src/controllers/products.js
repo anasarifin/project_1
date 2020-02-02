@@ -1,12 +1,19 @@
 const products = require('../models/products.js')
 
+function helper(data){
+    const json = {}
+    json.status = 'Success'
+    json.status_code = 200
+    json.data = data
+    return json
+}
 
 module.exports = {
     getProducts: (req, res) => {
         const sort = req.params.sort
         products.getProducts(sort)
         .then(result => {
-            res.json(result)
+            res.json(helper(result))
         })
     },
     getOneProduct: (req, res) => {

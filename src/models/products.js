@@ -3,7 +3,7 @@ const conn = require('../configs/database')
 module.exports = {
     getProducts: (sort) => {
         return new Promise((resolve, reject) => {
-            conn.query(`SELECT * FROM product_name ORDER BY ${sort || id} ASC`, (err, result) => {
+            conn.query(`SELECT * FROM product ORDER BY ${sort || 'id'} ASC`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -14,7 +14,7 @@ module.exports = {
     },
     getOneProduct: (id) => {
         return new Promise((resolve, reject) => {
-            conn.query(`SELECT * FROM product_name WHERE id = ${id}`, (err, result) => {
+            conn.query(`SELECT * FROM product WHERE id = ${id}`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -25,7 +25,7 @@ module.exports = {
     },
     insertProduct: (data) => {
         return new Promise((resolve, reject) => {
-            conn.query(`INSERT INTO product_name SET ?`, data, (err, result) => {
+            conn.query(`INSERT INTO product SET ?`, data, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -36,7 +36,7 @@ module.exports = {
     },
     updateProduct: (id, data) => {
         return new Promise((resolve, reject) => {
-            conn.query(`UPDATE product_name SET ? WHERE id = ${id}`, data, (err, result) => {
+            conn.query(`UPDATE product SET ? WHERE id = ${id}`, data, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -47,7 +47,7 @@ module.exports = {
     },
     deleteProduct: (id) => {
         return new Promise((resolve, reject) => {
-            conn.query(`DELETE FROM product_name WHERE id = ${id}`, (err, result) => {
+            conn.query(`DELETE FROM product WHERE id = ${id}`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
