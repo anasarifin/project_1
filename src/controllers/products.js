@@ -11,8 +11,9 @@ function helper(data){
 
 module.exports = {
     getProducts: (req, res) => {
+        const page = req.params.page
         const sort = req.params.sort
-        products.getProducts(sort)
+        products.getProducts(sort, page)
         .then(result => {
             res.json(helper(result))
         })

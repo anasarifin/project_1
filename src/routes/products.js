@@ -11,6 +11,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage})
 
+router.get('/products', products.getProducts)
 router.get('/products/:page', products.getProducts)
 router.get('/products/sort/:sort', products.getProducts)
 router.get('/product/:id', products.getOneProduct)

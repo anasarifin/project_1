@@ -1,9 +1,14 @@
 const conn = require('../configs/database')
 
 module.exports = {
-    getProducts: (sort) => {
+    getProducts: (sort, page) => {
+        if (!page) {
+            limit = ""
+        } else {
+            limit = ' LIMIT ' + ((page * 5) - 5) + ', 5'
+        }
         return new Promise((resolve, reject) => {
-            conn.query(`SELECT * FROM product ORDER BY ${sort || 'id'} ASC`, (err, result) => {
+            conn.query(`SELECT * FROM product ORDER BY ${sort || 'id'} ASC${limit}`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {
@@ -12,7 +17,7 @@ module.exports = {
             })
         })
     },
-    getOneProduct: (id) => {
+    getOneProduct: id => {
         return new Promise((resolve, reject) => {
             conn.query(`SELECT * FROM product WHERE id = ${id}`, (err, result) => {
                 if (!err) {
@@ -23,7 +28,7 @@ module.exports = {
             })
         })
     },
-    insertProduct: (data) => {
+    insertProduct: data => {
         return new Promise((resolve, reject) => {
             conn.query(`INSERT INTO product SET ?`, data, (err, result) => {
                 if (!err) {
@@ -45,7 +50,7 @@ module.exports = {
             })
         })
     },
-    deleteProduct: (id) => {
+    deleteProduct: id => {
         return new Promise((resolve, reject) => {
             conn.query(`DELETE FROM product WHERE id = ${id}`, (err, result) => {
                 if (!err) {

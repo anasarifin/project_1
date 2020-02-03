@@ -43,9 +43,11 @@ module.exports = {
     checkout: (req, res) => {
         const username = req.params.username
         const password = req.body.password
-        cart.checkout(username, password)
-        .then(resolve => {
-            res.json(resolve)
+        cart.getCart(username).then(resolve => {
+            cart.checkout(username, password)
+            .then(() => {
+                res.json(helper(resolve))
+            })
         })
     }
 }

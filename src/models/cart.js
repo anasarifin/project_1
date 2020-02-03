@@ -12,7 +12,6 @@ function checkExist(x) {
     return new Promise(resolve => {
         conn.query(`SELECT id FROM product WHERE id = '${x}'`, (err, data) => {
             if (err) throw err;
-            console.log(data)
             resolve(data[0])
         })
     })
@@ -21,7 +20,7 @@ function getCartList(username) {
     return new Promise(resolve => {
         conn.query(`SELECT product_id, quantity FROM cart WHERE username = '${username}'`, (err, data) => {
             if (err) throw err;
-            resolve(data[0])
+            resolve(data)
         })
     })
 }
@@ -52,9 +51,9 @@ module.exports = {
     },
     addCart: async (username, data) => {
         for (const x in data) {
-            const id = await checkExist(x).id
+            const id = await checkExist(x)
             const qty = await getQuantity(x)
-            
+            if(id) {
                 if (qty == undefined) {
                     conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, err => {
                         if (err) throw err;
@@ -64,14 +63,10 @@ module.exports = {
                         if (err) throw err;
                     })
                 }
-            
+            }
         }
         return new Promise(resolve => {
             resolve('Finish')
-            // conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
-            //     if (err) throw err;
-            //     resolve([username, data])
-            // })
         })
     },
     reduceCart: async (username, data) => {
@@ -111,7 +106,7 @@ module.exports = {
             if (err) throw err;
         })
         return new Promise(resolve => {
-            resolve("Success")
+            resolve('Finish')
         })
     }
 }
