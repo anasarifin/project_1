@@ -11,7 +11,7 @@ function helper(data){
     json.total_price = data[1].reduce((sum, x) => {
         return sum += x.price * x.quantity 
     }, 0)
-    json.items = data[1]
+    json.list_items = data[1]
     return json
 }
 
@@ -28,7 +28,15 @@ module.exports = {
         const data = req.body
         user.addCart(username, data)
         .then(resolve => {
-            res.json(resolve)
+            res.json(helper(resolve))
+        })
+    },
+    reduceCart: (req, res) => {
+        const username = req.params.username
+        const data = req.body
+        user.reduceCart(username, data)
+        .then(resolve => {
+            res.json(helper(resolve))
         })
     }
 }
