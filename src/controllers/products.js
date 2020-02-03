@@ -4,7 +4,8 @@ function helper(data){
     const json = {}
     json.status = 'Success'
     json.status_code = 200
-    json.data = data
+    json.total_products = data.length
+    json.product_list = data
     return json
 }
 
@@ -47,7 +48,7 @@ module.exports = {
             description: description,
             price: price,
             stock: stock,
-            image: 'empty',
+            image: req.file.filename,
             id_category: id_category
         }
         products.updateProduct(id, data)

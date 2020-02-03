@@ -11,7 +11,7 @@ function helper(data){
     json.total_price = data[1].reduce((sum, x) => {
         return sum += x.price * x.quantity 
     }, 0)
-    json.list_items = data[1]
+    json.item_list = data[1]
     return json
 }
 

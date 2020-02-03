@@ -11,5 +11,5 @@ app.use('/', router)
 app.use(nocache())
 
 app.listen(9999, () => {
-    console.log(9999)
+    console.log('\n Server started on port 9999 ...\n')
 })
