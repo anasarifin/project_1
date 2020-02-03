@@ -39,7 +39,7 @@ function getHistoryList(username, x) {
 module.exports = {
     getCart: username => {
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}'`, (err, data) => {
+            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
                 if (err) throw err;
                 resolve([username, data])
             })
@@ -49,7 +49,7 @@ module.exports = {
         for (const x in data) {
             const id = await checkExist(x).id
             const qty = await getQuantity(x)
-            if (id) {
+            
                 if (qty == undefined) {
                     conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, err => {
                         if (err) throw err;
@@ -59,10 +59,10 @@ module.exports = {
                         if (err) throw err;
                     })
                 }
-            }
+            
         }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, t.genre, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id LEFT JOIN category t ON p.category_id = t.genre WHERE username = '${username}'`, (err, data) => {
+            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
                 if (err) throw err;
                 resolve([username, data])
             })
@@ -84,7 +84,7 @@ module.exports = {
             }
         }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, t.genre, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id LEFT JOIN category t ON p.category_id = t.genre WHERE username = '${username}'`, (err, data) => {
+            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
                 if (err) throw err;
                 resolve([username, data])
             })
