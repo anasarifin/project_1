@@ -1,4 +1,4 @@
-const user = require('../models/user.js')
+const cart = require('../models/cart')
 
 function helper(data){
     const json = {}
@@ -18,7 +18,7 @@ function helper(data){
 module.exports = {
     getCart: (req, res) => {
         const username = req.params.username
-        user.getCart(username)
+        cart.getCart(username)
         .then(resolve => {
             res.json(helper(resolve))
         })
@@ -26,7 +26,7 @@ module.exports = {
     addCart: (req, res) => {
         const username = req.params.username
         const data = req.body
-        user.addCart(username, data)
+        cart.addCart(username, data)
         .then(resolve => {
             res.json(helper(resolve))
         })
@@ -34,9 +34,17 @@ module.exports = {
     reduceCart: (req, res) => {
         const username = req.params.username
         const data = req.body
-        user.reduceCart(username, data)
+        cart.reduceCart(username, data)
         .then(resolve => {
             res.json(helper(resolve))
+        })
+    },
+    checkout: (req, res) => {
+        const username = req.params.username
+        const password = req.body.password
+        cart.checkout(username, password)
+        .then(resolve => {
+            res.json(resolve)
         })
     }
 }
