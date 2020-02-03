@@ -18,7 +18,8 @@ function helper(data){
 module.exports = {
     getCart: (req, res) => {
         const username = req.params.username
-        cart.getCart(username)
+        const page = req.params.page
+        cart.getCart(username, page)
         .then(resolve => {
             res.json(helper(resolve))
         })
@@ -28,7 +29,7 @@ module.exports = {
         const data = req.body
         cart.addCart(username, data)
         .then(resolve => {
-            res.json(helper(resolve))
+            res.redirect(301, '/user/' + username)
         })
     },
     reduceCart: (req, res) => {
@@ -36,7 +37,7 @@ module.exports = {
         const data = req.body
         cart.reduceCart(username, data)
         .then(resolve => {
-            res.json(helper(resolve))
+            res.redirect(301, '/user/' + username)
         })
     },
     checkout: (req, res) => {

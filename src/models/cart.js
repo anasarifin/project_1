@@ -37,9 +37,14 @@ function getHistoryList(username, x) {
 
 
 module.exports = {
-    getCart: username => {
+    getCart: (username, page) => {
+        if (!page) {
+            limit = ""
+        } else {
+            limit = ' LIMIT ' + ((page * 5) - 5) + ', 5'
+        }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
+            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id${limit}`, (err, data) => {
                 if (err) throw err;
                 resolve([username, data])
             })
@@ -62,10 +67,11 @@ module.exports = {
             
         }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
-                if (err) throw err;
-                resolve([username, data])
-            })
+            resolve('Finish')
+            // conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
+            //     if (err) throw err;
+            //     resolve([username, data])
+            // })
         })
     },
     reduceCart: async (username, data) => {
@@ -84,10 +90,7 @@ module.exports = {
             }
         }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id`, (err, data) => {
-                if (err) throw err;
-                resolve([username, data])
-            })
+            resolve('Finish')
         })
     },
     checkout: async (username, password) => {
