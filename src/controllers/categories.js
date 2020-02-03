@@ -1,6 +1,5 @@
 const categories = require('../models/categories.js')
 
-
 module.exports = {
     getcategories: (req, res) => {
         categories.getcategories()
@@ -9,25 +8,30 @@ module.exports = {
         })
     },
     getOneCategory: (req, res) => {
-        categories.getOneCategory()
+        const id = req.params.id
+        categories.getOneCategory(id)
         .then(result => {
             helper.response(res, result, 200)
         })
     },
     insertCategory: (req, res) => {
-        categories.insertCategory()
+        const name = req.body.name
+        categories.insertCategory(name)
         .then(result => {
             helper.response(res, result, 200)
         })
     },
     updateCategory: (req, res) => {
-        categories.updateCategory()
+        const id = req.params.id
+        const name = req.body.name
+        categories.updateCategory(id, name)
         .then(result => {
             helper.response(res, result, 200)
         })
     },
     deleteCategory: (req, res) => {
-        categories.deleteCategory()
+        const id = req.params.id
+        categories.deleteCategory(id)
         .then(result => {
             helper.response(res, result, 200)
         })

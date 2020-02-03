@@ -34,7 +34,6 @@ module.exports = {
             image: 'empty',
             id_category: parseFloat(id_category)
         }
-        console.log(data)
         products.insertProduct(data)
         .then(result => {
             res.json(result)
