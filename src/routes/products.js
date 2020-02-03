@@ -11,11 +11,11 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage})
 
-router.get('/', products.getProducts)
-router.get('/sort/:sort', products.getProducts)
-router.get('/:id', products.getOneProduct)
-router.post('/', upload.single('image'), products.insertProduct)
-router.patch('/:id', upload.single('image'), products.updateProduct)
-router.delete('/:id', products.deleteProduct)
+router.get('/products/:page', products.getProducts)
+router.get('/products/sort/:sort', products.getProducts)
+router.get('/product/:id', products.getOneProduct)
+router.post('/product', upload.single('image'), products.insertProduct)
+router.patch('/product/:id', upload.single('image'), products.updateProduct)
+router.delete('/product/:id', products.deleteProduct)
 
 module.exports = router

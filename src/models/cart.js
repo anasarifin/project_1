@@ -8,10 +8,11 @@ function getQuantity(x) {
         })
     })
 }
-function getStock(x) {
+function checkExist(x) {
     return new Promise(resolve => {
-        conn.query(`SELECT stock FROM product WHERE id = '${x}'`, (err, data) => {
+        conn.query(`SELECT id FROM product WHERE id = '${x}'`, (err, data) => {
             if (err) throw err;
+            console.log(data)
             resolve(data[0])
         })
     })
@@ -20,7 +21,7 @@ function getCartList(username) {
     return new Promise(resolve => {
         conn.query(`SELECT product_id, quantity FROM cart WHERE username = '${username}'`, (err, data) => {
             if (err) throw err;
-            resolve(data)
+            resolve(data[0])
         })
     })
 }
@@ -46,15 +47,18 @@ module.exports = {
     },
     addCart: async (username, data) => {
         for (const x in data) {
+            const id = await checkExist(x).id
             const qty = await getQuantity(x)
-            if (qty == undefined) {
-                conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, err => {
-                    if (err) throw err;
-                })
-            } else {
-                conn.query(`UPDATE cart SET quantity = '${parseFloat(qty.quantity) + parseFloat(data[x])}' WHERE username = '${username}' AND product_id = '${x}'`, err => {
-                    if (err) throw err;
-                })
+            if (id) {
+                if (qty == undefined) {
+                    conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, err => {
+                        if (err) throw err;
+                    })
+                } else {
+                    conn.query(`UPDATE cart SET quantity = '${parseFloat(qty.quantity) + parseFloat(data[x])}' WHERE username = '${username}' AND product_id = '${x}'`, err => {
+                        if (err) throw err;
+                    })
+                }
             }
         }
         return new Promise(resolve => {
