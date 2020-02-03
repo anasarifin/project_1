@@ -1,30 +1,34 @@
-const user = require('../models/user')
+const user = require('../models/user.js')
 
 function helper(data){
     const json = {}
     json.status = 'Success'
     json.status_code = 200
-    json.total_products = data.length
-    json.total_price = data.filter(x => x != null)
-    .reduce((sum, x) => {return sum += x.price}, 0)
-    json.data = data
+    json.username = data[0]
+    json.total_items = data[1].reduce((sum, x) => {
+        return sum += 1 * x.quantity 
+    }, 0)
+    json.total_price = data[1].reduce((sum, x) => {
+        return sum += x.price * x.quantity 
+    }, 0)
+    json.items = data[1]
     return json
 }
 
 module.exports = {
-    cart: (req, res) => {
+    getCart: (req, res) => {
         const username = req.params.username
-        user.cart(username)
-        .then(resolve => {
-            console.log(resolve)
-            res.json(helper(resolve))
-        })
-    },
-    history: (req, res) => {
-        const username = req.params.username
-        user.history(username)
+        user.getCart(username)
         .then(resolve => {
             res.json(helper(resolve))
         })
     },
+    addCart: (req, res) => {
+        const username = req.params.username
+        const data = req.body
+        user.addCart(username, data)
+        .then(resolve => {
+            res.json(resolve)
+        })
+    }
 }
