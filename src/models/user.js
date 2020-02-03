@@ -32,7 +32,7 @@ module.exports = {
             }
         }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, t.genre, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}'`, (err, data) => {
+            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, t.genre, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id LEFT JOIN category t ON p.category_id = t.genre WHERE username = '${username}'`, (err, data) => {
                 if (err) throw err;
                 resolve([username, data])
             })
@@ -54,7 +54,7 @@ module.exports = {
             }
         }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, t.genre, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}'`, (err, data) => {
+            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, t.genre, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id LEFT JOIN category t ON p.category_id = t.genre WHERE username = '${username}'`, (err, data) => {
                 if (err) throw err;
                 resolve([username, data])
             })
