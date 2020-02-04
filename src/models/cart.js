@@ -1,8 +1,8 @@
 const conn = require('../configs/database')
 
-function getQuantity(x) {
+function getQuantity(x, username) {
     return new Promise(resolve => {
-        conn.query(`SELECT quantity FROM cart WHERE product_id = '${x}'`, (err, data) => {
+        conn.query(`SELECT quantity FROM cart WHERE product_id = '${x}' AND username = '${username}'`, (err, data) => {
             if (err) throw err;
             resolve(data[0])
         })
@@ -56,15 +56,17 @@ module.exports = {
     },
     addCart: async (username, data) => {
         for (const x in data) {
-            const id = await checkExist(x)
+            console.log(await checkExist(x));
+            if(await checkExist(x)) {
             const qty = await getQuantity(x)
-            if(id) {
+            console.log(qty);
                 if (qty == undefined) {
-                    conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, err => {
+                    conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, (err, data) => {
+                        console.log('baru');
                         if (err) throw err;
                     })
                 } else {
-                    conn.query(`UPDATE cart SET quantity = '${parseFloat(qty.quantity) + parseFloat(data[x])}' WHERE username = '${username}' AND product_id = '${x}'`, err => {
+                    conn.query(`UPDATE cart SET quantity = '${parseFloat(qty.quantity) + parseFloat(data[x])}' WHERE username = '${username}' AND product_id = '${x}'`, (err, data) => {
                         if (err) throw err;
                     })
                 }
