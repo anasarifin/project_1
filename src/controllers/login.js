@@ -1,16 +1,29 @@
 const login = require('../models/login')
 
 module.exports = {
-    create: (req, res) => {
+    createToken: (req, res) => {
         const username = req.body.username
         const password = req.body.password
-        login.create(username, password)
+        login.createToken(username, password)
         .then(resolve => {
             res.json({token: resolve})
         })
         .catch(reject => {
             res.json({msg: reject})
         })
+    },
+    register: (req, res) => {
+        const username = req.body.username
+        const password = req.body.password
+        login.register(username, password)
+        .then(resolve => {
+            console.log('success');
+            res.json(resolve)
+        }).catch(reject => {
+            console.log('gagal');
+            res.json({msg: reject})
+        })
+    }
 
 
 
@@ -18,5 +31,5 @@ module.exports = {
         // res.json({
         //     token: token
         // })
-    }
+
 }

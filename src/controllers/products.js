@@ -26,13 +26,13 @@ module.exports = {
         })
     },
     insertProduct: (req, res) => {
-        const {name, description, price, stock, category_id} = req.body
+        const {name, description, price, stock, image, category_id} = req.body
         const data = {
             name: name,
             description: description,
             price: parseFloat(price),
             stock: parseFloat(stock),
-            image: 'empty',
+            image: req.file? req.file.filename : image,
             category_id: parseFloat(category_id)
         }
         products.insertProduct(data)
@@ -42,13 +42,13 @@ module.exports = {
     },
     updateProduct: (req, res) => {
         const id = req.params.id
-        const {name, description, price, stock, category_id} = req.body
+        const {name, description, price, stock, image, category_id} = req.body
         const data = {
             name: name,
             description: description,
             price: parseFloat(price),
             stock: parseFloat(stock),
-            image: req.file.filename,
+            image: req.file? req.file.filename : image,
             category_id: parseFloat(category_id)
         }
         products.updateProduct(id, data)
