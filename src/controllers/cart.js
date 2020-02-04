@@ -24,7 +24,8 @@ module.exports = {
         })
     },
     addCart: (req, res) => {
-        const username = req.params.username
+        console.log(req.username);
+        const username = req.username
         const data = req.body
         cart.addCart(username, data)
         .then(() => {
@@ -32,7 +33,7 @@ module.exports = {
         })
     },
     reduceCart: (req, res) => {
-        const username = req.params.username
+        const username = req.username
         const data = req.body
         cart.reduceCart(username, data)
         .then(() => {
@@ -40,7 +41,7 @@ module.exports = {
         })
     },
     checkout: (req, res) => {
-        const username = req.params.username
+        const username = req.username
         const password = req.body.password
         cart.getCart(username).then(resolve => {
             resolve[1].forEach(x => {

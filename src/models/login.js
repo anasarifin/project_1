@@ -31,19 +31,6 @@ module.exports = {
             reject('Username or password incorrect!')
         })
     },
-    verify: (req, res, next) => {
-        token = req.headers['x-access-token']
-        try {
-            const decoded = jwt.verify(token, 'secret')
-            console.log(decoded)
-            next()
-        } catch (err){
-            console.log(err)
-            res.json({
-                msg: 'Access denied!'
-            })
-        }
-    },
     register: (username, password) => {
         return new Promise(async (resolve, reject) => {
             const regex = /[a-z0-9]/gi
@@ -66,7 +53,3 @@ module.exports = {
         })
     }
 }
-
-return new Promise((resolve, reject) => {
-    
-})
