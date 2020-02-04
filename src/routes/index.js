@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const products = require('./products')
-const user = require('./cart')
+const user = require('./user')
 const login = require('./login')
 const auth = require('../models/login')
 
