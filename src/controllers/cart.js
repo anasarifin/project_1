@@ -2,8 +2,6 @@ const cart = require('../models/cart')
 
 function helper(data){
     const json = {}
-    json.status = 'Success'
-    json.status_code = 200
     json.username = data[0]
     json.total_items = data[1].reduce((sum, x) => {
         return sum += 1 * x.quantity 
@@ -19,7 +17,8 @@ module.exports = {
     getCart: (req, res) => {
         const username = req.params.username
         const page = req.params.page
-        cart.getCart(username, page)
+        const sort = req.params.sort
+        cart.getCart(username, page, sort)
         .then(resolve => {
             res.json(helper(resolve))
         })
@@ -28,7 +27,7 @@ module.exports = {
         const username = req.params.username
         const data = req.body
         cart.addCart(username, data)
-        .then(resolve => {
+        .then(() => {
             res.redirect(301, '/user/' + username)
         })
     },
@@ -36,7 +35,7 @@ module.exports = {
         const username = req.params.username
         const data = req.body
         cart.reduceCart(username, data)
-        .then(resolve => {
+        .then(() => {
             res.redirect(301, '/user/' + username)
         })
     },
@@ -44,9 +43,14 @@ module.exports = {
         const username = req.params.username
         const password = req.body.password
         cart.getCart(username).then(resolve => {
+            resolve[1].forEach(x => {
+                delete x.updated_at
+            });
+            delete resolve[1].update_at
+            const payment = {status: 'Purchased success', purchased_date: new Date().toISOString(), ...helper(resolve)}
             cart.checkout(username, password)
             .then(() => {
-                res.json(helper(resolve))
+                res.json(payment)
             })
         })
     }

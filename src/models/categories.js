@@ -25,7 +25,7 @@ module.exports = {
     },
     insertCategory: (name) => {
         return new Promise((resolve, reject) => {
-            conn.query(`INSERT INTO category SET ?`, name, (err, result) => {
+            conn.query(`INSERT INTO category SET '${name}'`, (err, result) => {
                 if (!err) {
                     resolve(result)
                 } else {

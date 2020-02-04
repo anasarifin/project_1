@@ -36,14 +36,19 @@ function getHistoryList(username, x) {
 
 
 module.exports = {
-    getCart: (username, page) => {
+    getCart: (username, page, sort) => {
         if (!page) {
             limit = ""
         } else {
             limit = ' LIMIT ' + ((page * 5) - 5) + ', 5'
         }
+        if (!sort) {
+            order = 'product_id'
+        } else {
+            order = sort
+        }
         return new Promise(resolve => {
-            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY product_id${limit}`, (err, data) => {
+            conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${username}' ORDER BY ${order}${limit}`, (err, data) => {
                 if (err) throw err;
                 resolve([username, data])
             })
