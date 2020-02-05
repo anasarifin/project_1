@@ -2,82 +2,83 @@
 
 
 ### Product
-Untuk melihat daftar seluruh product
-http://localhost:9999/products
+Untuk melihat daftar seluruh product<br />
+http://localhost:9999/products<br />
 
-Untuk melihat daftar seluruh product dengan pagination, 5 products per halaman
-http://localhost:9999/products/1
-"1" = halaman yg ingin anda kunjungi
+Untuk melihat daftar seluruh product dengan pagination, 5 products per halaman<br />
+http://localhost:9999/products/1<br />
+"1" = halaman yg ingin anda kunjungi<br />
 
-Untuk melihat daftar seluruh product dengan sorting
-http://localhost:9999/products/sort/type
-"type" = jenis data yg ingin disorting (contoh: name, price, stock, updated_at, dll.)
-Bisa juga melakukan sorting secara descending dengan menambah parameter /desc
-Contoh: http://localhost:9999/products/sort/name/desc
+Untuk melihat daftar seluruh product dengan sorting<br />
+http://localhost:9999/products/sort/type<br />
+"type" = jenis data yg ingin disorting (contoh: name, price, stock, updated_at, dll.)<br />
+Bisa juga melakukan sorting secara descending dengan menambah parameter /desc<br />
+Contoh: http://localhost:9999/products/sort/name/desc<br />
 
-Untuk melakukan pencarian terhadap product dengan keyword tertentu
-http://localhost:9999/products/search/keyword
-"keyword" = keyword yg kita ingin cari berdasarkan nama product
+Untuk melakukan pencarian terhadap product dengan keyword tertentu<br />
+http://localhost:9999/products/search/keyword<br />
+"keyword" = keyword yg kita ingin cari berdasarkan nama product<br />
 
-Untuk melakukan pencarian terhadap product yg memiliki id tertentu
-http://localhost:9999/product/1
-"1" = id product yg ingin kita telusuri
+Untuk melakukan pencarian terhadap product yg memiliki id tertentu<br />
+http://localhost:9999/product/1<br />
+"1" = id product yg ingin kita telusuri<br />
 
-Untuk mengubah detail dari suatu product
-http://localhost:9999/product/1
-"1" = id product yg ingin kita ubah
-Dengan method patch, di dalam form body masukan data yg ingin diubah
+Untuk mengubah detail dari suatu product<br />
+http://localhost:9999/product/1<br />
+"1" = id product yg ingin kita ubah<br />
+Dengan method patch, di dalam form body masukan data yg ingin diubah<br />
 
-Untuk menghapus suatu product
-http://localhost:9999/product/1
-"1" = id product yg ingin kita ubah
-Kirim request dengan menggunakan method delete
+Untuk menghapus suatu product<br />
+http://localhost:9999/product/1<br />
+"1" = id product yg ingin kita ubah<br />
+Kirim request dengan menggunakan method delete<br />
 
-Untuk menambahkan product baru
-http://localhost:9999/products
-Dengan method post, di dalam form body masukan data yg ingin diubah
+Untuk menambahkan product baru<br />
+http://localhost:9999/products<br />
+Dengan method post, di dalam form body masukan data yg ingin diubah<br />
 
 
 
 
 
 ### User
-Untuk registrasi user
-http://localhost:9999/register
-Dengan method post, masukkan key "username" dengan value username yg diinginkan dan key "password" dengan value password yg diinginkan
-Username tidak boleh menggunakan symbol dan harus terdiri dari 4 - 16 character
-Password tidak boleh menggunakan symbol dan minimal harus terdiri dari 6 character
+Untuk registrasi user<br />
+http://localhost:9999/register<br />
+Dengan method post, masukkan key "username" dengan value username yg diinginkan<br />
+dan key "password" dengan value password yg diinginkan<br />
+Username tidak boleh menggunakan symbol dan harus terdiri dari 4 - 16 character<br />
+Password tidak boleh menggunakan symbol dan minimal harus terdiri dari 6 character<br />
 
-Agar bisa melakukan proses transaksi, silahkan login terlebih dahulu
-http://localhost:9999/login
-Dengan method post, masukkan key "username" dengan value username yg diinginkan dan key "password" dengan value password
-Jika proses login berhasil, maka anda akan mendapatkan sebuah token
+Agar bisa melakukan proses transaksi, silahkan login terlebih dahulu<br />
+http://localhost:9999/login<br />
+Dengan method post, masukkan key "username" dengan value username yg diinginkan dan key "password" dengan value password<br />
+Jika proses login berhasil, maka anda akan mendapatkan sebuah token<br />
 
-Setiap kita ingin melakukan transakti, kita harus selalu menginclude token yg tadi kita dapatkan ke headers
-Untuk key-nya diisi dengan "user-token" dan valuenya diisi dengan token yg tadi
+Setiap kita ingin melakukan transakti, kita harus selalu menginclude token yg tadi kita dapatkan ke headers<br />
+Untuk key-nya diisi dengan "user-token" dan valuenya diisi dengan token yg tadi<br />
 
-Untuk menambah barang ke cart
-http://localhost:9999/user
-Dengan method patch, masukkan key sesuai dengan product id dan valuenya diisi dengan quantity yg ingin ditambah
-Kita bisa melakukan proses ini secara batch, dengan menambah key yg lainnya
+Untuk menambah barang ke cart<br />
+http://localhost:9999/user<br />
+Dengan method patch, masukkan key sesuai dengan product id dan valuenya diisi dengan quantity yg ingin ditambah<br />
+Kita bisa melakukan proses ini secara batch, dengan menambah key yg lainnya<br />
 
-Untuk mengurangi barang dari cart
-http://localhost:9999/user
-Pengoperasiannya sama seperti jika ingin menambah barang, hanya saja disini kita menggunakan method delete
+Untuk mengurangi barang dari cart<br />
+http://localhost:9999/user<br />
+Pengoperasiannya sama seperti jika ingin menambah barang, hanya saja disini kita menggunakan method delete<br />
 
-Untuk melihat isi dari cart, bisa menggunakan method get
-http://localhost:9999/user
+Untuk melihat isi dari cart, bisa menggunakan method get<br />
+http://localhost:9999/user<br />
 
-Jika kita ingin melihat cart milik orang lain
-http://localhost:9999/user/name
-"Name" = nama username yg ingin kita lihat cartnya
+Jika kita ingin melihat cart milik orang lain<br />
+http://localhost:9999/user/name<br />
+"Name" = nama username yg ingin kita lihat cartnya<br />
 
-Untuk melakukan payment, bisa menggunakan method post
-http://localhost:9999/user
-Jika transaksi berhasil maka barang yg ada di cart otomatis berpindah ke data history,
-selama stock dari barang yg dibeli masih tersedia
+Untuk melakukan payment, bisa menggunakan method post<br />
+http://localhost:9999/user<br />
+Jika transaksi berhasil maka barang yg ada di cart otomatis berpindah ke data history,<br />
+selama stock dari barang yg dibeli masih tersedia<br />
 
-Untuk melihat history payment
-http://localhost:9999/history
-Jika kita ingin meng-filter sesuai tanggal, bisa masukkan key "start" dan "end"
-sesuai tanggal yg diinginkan dengan format seperti "2012-01-31"
+Untuk melihat history payment<br />
+http://localhost:9999/history<br />
+Jika kita ingin meng-filter sesuai tanggal, bisa masukkan key "start" dan "end"<br />
+sesuai tanggal yg diinginkan dengan format seperti "2012-01-31"<br />
