@@ -44,7 +44,6 @@ module.exports = {
 	},
 	checkout: (req, res) => {
 		const username = req.username;
-		// const password = req.body.password
 		user.getCart(username).then(resolve => {
 			resolve[1].forEach(x => {
 				delete x.updated_at;

@@ -7,13 +7,15 @@ const storage = multer.diskStorage({
 	},
 	filename: function(req, file, callback) {
 		callback(null, file.originalname);
-	}
+	},
 });
 const upload = multer({ storage });
 
 router.get("/products", products.getProducts);
 router.get("/products/:page", products.getProducts);
 router.get("/products/sort/:sort", products.getProducts);
+router.get("/products/sort/:sort/:desc", products.getProducts);
+router.get("/products/search/:search", products.getProducts);
 router.get("/product/:id", products.getOneProduct);
 router.post("/products", upload.single("image"), products.insertProduct);
 router.patch("/product/:id", upload.single("image"), products.updateProduct);

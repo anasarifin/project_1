@@ -1,14 +1,25 @@
 const conn = require("../configs/database");
 
 module.exports = {
-	getProducts: (sort, page) => {
+	getProducts: (sort, page, desc, search) => {
 		if (!page) {
 			limit = "";
 		} else {
-			limit = " LIMIT " + (page * 5 - 5) + ", 5";
+			limit = "LIMIT " + (page * 5 - 5) + ", 5";
 		}
+		if (desc == "desc") {
+			sortDir = "DESC";
+		} else {
+			sortDir = "ASC";
+		}
+		if (!search) {
+			keyword = "";
+		} else {
+			keyword = "WHERE name LIKE '%" + search + "%'";
+		}
+
 		return new Promise((resolve, reject) => {
-			conn.query(`SELECT * FROM product ORDER BY ${sort || "id"} ASC${limit}`, (err, result) => {
+			conn.query(`SELECT * FROM product ${keyword} ORDER BY ${sort || "id"} ${sortDir} ${limit}`, (err, result) => {
 				if (!err) {
 					resolve(result);
 				} else {

@@ -2,8 +2,6 @@ const products = require("../models/products.js");
 
 function helper(data) {
 	const json = {};
-	json.status = "Success";
-	json.status_code = 200;
 	json.total_products = data.length;
 	json.product_list = data;
 	return json;
@@ -13,7 +11,9 @@ module.exports = {
 	getProducts: (req, res) => {
 		const page = req.params.page;
 		const sort = req.params.sort;
-		products.getProducts(sort, page).then(result => {
+		const desc = req.params.desc;
+		const search = req.params.search;
+		products.getProducts(sort, page, desc, search).then(result => {
 			res.json(helper(result));
 		});
 	},
