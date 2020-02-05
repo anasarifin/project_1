@@ -1,4 +1,4 @@
-const history = require("../models/history.js");
+const history = require("../models/history");
 
 function helper(data) {
 	const json = {};
