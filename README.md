@@ -1,7 +1,8 @@
 ## Make a RESTful API for Point of Sales with Node.js and Express.js
-
 <br />
-### Product<br />
+<br />
+### Product
+<br />
 Untuk melihat daftar seluruh product<br />
 http://localhost:9999/products<br />
 <br />
@@ -39,9 +40,10 @@ Dengan method post, di dalam form body masukan data yg ingin diubah<br />
 
 
 
-
 <br />
-### User<br />
+<br />
+### User
+<br />
 Untuk registrasi user<br />
 http://localhost:9999/register<br />
 Dengan method post, masukkan key "username" dengan value username yg diinginkan<br />
