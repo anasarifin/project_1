@@ -32,8 +32,19 @@ function getHistoryList(username, x) {
         })
     })
 }
-
-
+function checkStock(id, qty) {
+    return new Promise(resolve => {
+        conn.query(`SELECT stock FROM product WHERE id = '${id}'`, (err, data) => {
+            if (err) throw err;
+            if (data[0].stock - qty >= 0) {
+                console.log(data[0].stock - qty);
+                resolve(data[0].stock - qty)
+            } else {
+                resolve(false)
+            }
+        })
+    })
+}
 
 module.exports = {
     getCart: (username, page, sort) => {
@@ -56,13 +67,10 @@ module.exports = {
     },
     addCart: async (username, data) => {
         for (const x in data) {
-            console.log(await checkExist(x));
             if(await checkExist(x)) {
             const qty = await getQuantity(x)
-            console.log(qty);
                 if (qty == undefined) {
                     conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, (err, data) => {
-                        console.log('baru');
                         if (err) throw err;
                     })
                 } else {
@@ -95,16 +103,22 @@ module.exports = {
             resolve('Finish')
         })
     },
-    checkout: async (username, password) => {
+    checkout: async (username) => {
         const cartList = await getCartList(username)
         for (const x in cartList) {
             const historyList = await getHistoryList(username, cartList[x].product_id)
-            if (historyList == undefined) {
-            conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
-                    if (err) throw err;
-                })
-            } else {
-                conn.query(`UPDATE history SET quantity = '${parseFloat(historyList.quantity) + parseFloat(cartList[x].quantity)}' WHERE id = '${historyList.id}'`, err => {
+            const stock = await checkStock(cartList[x].product_id, cartList[x].quantity)
+            if (stock !== false) {
+                if (historyList == undefined) {
+                    conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
+                        if (err) throw err;
+                    })
+                } else {
+                    conn.query(`UPDATE history SET quantity = '${parseFloat(historyList.quantity) + parseFloat(cartList[x].quantity)}' WHERE id = '${historyList.id}'`, err => {
+                        if (err) throw err;
+                    })
+                }
+                conn.query(`UPDATE product SET stock = ${stock} WHERE id = '${cartList[x].product_id}'`, err => {
                     if (err) throw err;
                 })
             }

@@ -46,9 +46,10 @@ module.exports = {
         user.getCart(username).then(resolve => {
             resolve[1].forEach(x => {
                 delete x.updated_at
-            });
-            delete resolve[1].update_at
+            })
             const payment = {status: 'Purchased success', purchased_date: new Date().toISOString(), ...helper(resolve)}
+            payment.purchased_list = payment.item_list
+            delete payment.item_list
             user.checkout(username, password)
             .then(() => {
                 res.json(payment)
