@@ -63,7 +63,7 @@ Kita bisa melakukan proses ini secara batch, dengan menambah key yg lainnya
 
 Untuk mengurangi barang dari cart
 http://localhost:9999/user
-Pengoperasiannya sama seperti jika ingin menambah barang, hanya saja disini kita menggunakan method delete.
+Pengoperasiannya sama seperti jika ingin menambah barang, hanya saja disini kita menggunakan method delete
 
 Untuk melihat isi dari cart, bisa menggunakan method get
 http://localhost:9999/user
@@ -74,4 +74,10 @@ http://localhost:9999/user/name
 
 Untuk melakukan payment, bisa menggunakan method post
 http://localhost:9999/user
+Jika transaksi berhasil maka barang yg ada di cart otomatis berpindah ke data history,
+selama stock dari barang yg dibeli masih tersedia
 
+Untuk melihat history payment
+http://localhost:9999/history
+Jika kita ingin meng-filter sesuai tanggal, bisa masukkan key "start" dan "end"
+sesuai tanggal yg diinginkan dengan format seperti "2012-01-31"
