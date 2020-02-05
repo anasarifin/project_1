@@ -12,6 +12,12 @@ function helper(data){
     json.item_list = data[1]
     return json
 }
+function filter(data1, data2) {
+    const outOfStock = data2.map(x => x = x.product_id)
+    return new Promise(resolve => {
+        resolve(data1.filter(x => !outOfStock.includes(x.product_id)))
+    })
+}
 
 module.exports = {
     getCart: (req, res) => {
@@ -24,7 +30,6 @@ module.exports = {
         })
     },
     addCart: (req, res) => {
-        console.log(req.username);
         const username = req.username
         const data = req.body
         user.addCart(username, data)
@@ -42,16 +47,21 @@ module.exports = {
     },
     checkout: (req, res) => {
         const username = req.username
-        const password = req.body.password
+        // const password = req.body.password
         user.getCart(username).then(resolve => {
             resolve[1].forEach(x => {
                 delete x.updated_at
             })
-            const payment = {status: 'Purchased success', purchased_date: new Date().toISOString(), ...helper(resolve)}
-            payment.purchased_list = payment.item_list
-            delete payment.item_list
-            user.checkout(username, password)
-            .then(() => {
+            user.checkout(username)
+            .then(async resolve2 => {
+                resolve2.forEach(x => {
+                    delete x.updated_at
+                })
+                const filterBuy = await filter(resolve[1], resolve2)
+                const payment = {status: 'Transaction success', purchased_date: new Date().toISOString(), ...helper([username, filterBuy])}
+                payment.item_bought = payment.item_list
+                delete payment.item_list
+                payment.out_of_stock = resolve2
                 res.json(payment)
             })
         })

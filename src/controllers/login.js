@@ -18,9 +18,6 @@ module.exports = {
         .then(resolve => {
             res.json({token: resolve})
         })
-        .catch(reject => {
-            res.json({msg: reject})
-        })
     },
     register: (req, res) => {
         const username = req.body.username
@@ -28,11 +25,7 @@ module.exports = {
         
         login.register(username, password)
         .then(resolve => {
-            console.log('success');
             res.json(resolve)
-        }).catch(reject => {
-            console.log('gagal');
-            res.json({msg: reject})
         })
     }
 

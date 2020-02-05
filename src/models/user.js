@@ -37,11 +37,18 @@ function checkStock(id, qty) {
         conn.query(`SELECT stock FROM product WHERE id = '${id}'`, (err, data) => {
             if (err) throw err;
             if (data[0].stock - qty >= 0) {
-                console.log(data[0].stock - qty);
                 resolve(data[0].stock - qty)
             } else {
                 resolve(false)
             }
+        })
+    })
+}
+function outOfStock(id) {
+    return new Promise(resolve => {
+        conn.query(`SELECT c.quantity, p.id AS product_id, p.name, p.price, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE product_id = '${id}'`, (err, data) => {
+            if (err) throw err;
+            resolve(data[0])
         })
     })
 }
@@ -68,7 +75,7 @@ module.exports = {
     addCart: async (username, data) => {
         for (const x in data) {
             if(await checkExist(x)) {
-            const qty = await getQuantity(x)
+            const qty = await getQuantity(x, username)
                 if (qty == undefined) {
                     conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, (err, data) => {
                         if (err) throw err;
@@ -105,29 +112,26 @@ module.exports = {
     },
     checkout: async (username) => {
         const cartList = await getCartList(username)
+        let stockEmpty = []
         for (const x in cartList) {
             const historyList = await getHistoryList(username, cartList[x].product_id)
             const stock = await checkStock(cartList[x].product_id, cartList[x].quantity)
             if (stock !== false) {
-                if (historyList == undefined) {
-                    conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
-                        if (err) throw err;
-                    })
-                } else {
-                    conn.query(`UPDATE history SET quantity = '${parseFloat(historyList.quantity) + parseFloat(cartList[x].quantity)}' WHERE id = '${historyList.id}'`, err => {
-                        if (err) throw err;
-                    })
-                }
+                conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
+                    if (err) throw err;
+                })
                 conn.query(`UPDATE product SET stock = ${stock} WHERE id = '${cartList[x].product_id}'`, err => {
                     if (err) throw err;
                 })
+            } else if (stock === false) {
+                stockEmpty.push(await outOfStock(cartList[x].product_id))
             }
         }
         conn.query(`DELETE FROM cart WHERE username = '${username}'`, err => {
             if (err) throw err;
         })
         return new Promise(resolve => {
-            resolve('Finish')
+            resolve(stockEmpty)
         })
     }
 }
