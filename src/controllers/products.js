@@ -1,21 +1,31 @@
 const products = require("../models/products.js");
 
-function helper(data) {
-	const json = {};
-	json.total_products = data.length;
-	json.product_list = data;
-	return json;
-}
-
 module.exports = {
 	getProducts: (req, res) => {
 		const page = req.params.page;
 		const sort = req.params.sort;
 		const desc = req.params.desc;
 		const search = req.params.search;
-		products.getProducts(sort, page, desc, search).then(result => {
-			res.json(helper(result));
-		});
+		if (!page) {
+			products.getProducts(sort, page, desc, search).then(result => {
+				const final = {};
+				final.total_products = result.length;
+				final.product_list = result;
+				res.json(final);
+			});
+		} else {
+			products.getProducts(sort).then(result => {
+				products.getProductsLimit(page).then(result2 => {
+					const final = {};
+					final.current_page = parseFloat(page);
+					final.total_page = Math.ceil(result.length / 5);
+					final.prev_page = page == 1 ? null : "http://localhost:9999/products/" + (page - 1);
+					final.next_page = page == Math.ceil(result.length / 5) ? null : "http://localhost:9999/products/" + (parseFloat(page) + 1);
+					final.product_list = result2;
+					res.json(final);
+				});
+			});
+		}
 	},
 	getOneProduct: (req, res) => {
 		const id = req.params.id;

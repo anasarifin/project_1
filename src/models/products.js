@@ -28,6 +28,18 @@ module.exports = {
 			});
 		});
 	},
+	getProductsLimit: page => {
+		return new Promise((resolve, reject) => {
+			const limit = "LIMIT " + (page * 5 - 5) + ", 5";
+			conn.query(`SELECT * FROM product ORDER BY "id" ASC ${limit}`, (err, result) => {
+				if (!err) {
+					resolve(result);
+				} else {
+					reject(new Error(err));
+				}
+			});
+		});
+	},
 	getOneProduct: id => {
 		return new Promise((resolve, reject) => {
 			conn.query(`SELECT * FROM product WHERE id = ${id}`, (err, result) => {
