@@ -74,7 +74,8 @@ module.exports = {
     },
     addCart: async (username, data) => {
         for (const x in data) {
-            if(await checkExist(x)) {
+            console.log(data[x]);
+            if(await checkExist(x) && data[x] > 0) {
             const qty = await getQuantity(x, username)
                 if (qty == undefined) {
                     conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, (err, data) => {
@@ -93,10 +94,11 @@ module.exports = {
     },
     reduceCart: async (username, data) => {
         for (const x in data) {
-            const qty = await getQuantity(x)
-            if (qty != undefined) {
+            const qty = await getQuantity(x, username)
+            if (qty != undefined && data[x] > 0) {
                 if (qty.quantity - data[x] <= 0) {
-                    conn.query(`DELETE FROM cart WHERE product_id = '${x}'`, err => {
+                    console.log("ada nih");
+                    conn.query(`DELETE FROM cart WHERE product_id = '${x}' AND username = '${username}'`, err => {
                         if (err) throw err;
                     })
                 } else {
