@@ -68,7 +68,7 @@ module.exports = {
 							resolve(result);
 						});
 					} else {
-						reject("Username is already taken!");
+						reject("Username has already been taken!");
 					}
 				} else {
 					reject("Password must have min 6 character and not included special char!");

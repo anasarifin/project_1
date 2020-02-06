@@ -12,8 +12,6 @@ module.exports = {
 		} else {
 			endDate = end + " 23.59.59";
 		}
-		console.log(endDate);
-		console.log(end);
 		return new Promise(resolve => {
 			conn.query(`SELECT h.username, p.name, p.price, h.quantity, h.updated_at FROM history h LEFT JOIN product p ON h.product_id = p.id WHERE h.updated_at <= '${endDate}' AND h.updated_at >= '${startDate}' ORDER BY ${sort || "updated_at"} DESC`, (err, result) => {
 				if (err) throw err;

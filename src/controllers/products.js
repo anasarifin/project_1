@@ -19,8 +19,8 @@ module.exports = {
 					const final = {};
 					final.current_page = parseFloat(page);
 					final.total_page = Math.ceil(result.length / 5);
-					final.prev_page = page == 1 ? null : "http://localhost:9999/products/" + (page - 1);
-					final.next_page = page == Math.ceil(result.length / 5) ? null : "http://localhost:9999/products/" + (parseFloat(page) + 1);
+					final.prev_page = page == 1 ? null : "http://localhost:9999/api/v1/products/" + (page - 1);
+					final.next_page = page == Math.ceil(result.length / 5) ? null : "http://localhost:9999/api/v1/products/" + (parseFloat(page) + 1);
 					final.total_products = result.length;
 					final.product_list = result2;
 					res.json(final);

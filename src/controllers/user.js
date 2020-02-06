@@ -34,14 +34,14 @@ module.exports = {
 		const admin = req.admin;
 		console.log(admin);
 		user.addCart(username, data).then(() => {
-			res.redirect(301, "/user/" + username);
+			res.redirect(301, "/api/v1/user/" + username);
 		});
 	},
 	reduceCart: (req, res) => {
 		const username = req.username;
 		const data = req.body;
 		user.reduceCart(username, data).then(() => {
-			res.redirect(301, "/user/" + username);
+			res.redirect(301, "/api/v1/user/" + username);
 		});
 	},
 	checkout: (req, res) => {
