@@ -31,6 +31,8 @@ module.exports = {
 	addCart: (req, res) => {
 		const username = req.username;
 		const data = req.body;
+		const admin = req.admin;
+		console.log(admin);
 		user.addCart(username, data).then(() => {
 			res.redirect(301, "/user/" + username);
 		});

@@ -66,8 +66,9 @@ module.exports = {
 	},
 	addCart: async (username, data) => {
 		for (const x in data) {
-			console.log(data[x]);
+			// check if product id available in database or not
 			if ((await checkExist(x)) && data[x] > 0) {
+				// to retrieve quantity from cart database
 				const qty = await getQuantity(x, username);
 				if (qty == undefined) {
 					conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${username}', '${x}', '${data[x]}')`, (err, data) => {
@@ -86,10 +87,10 @@ module.exports = {
 	},
 	reduceCart: async (username, data) => {
 		for (const x in data) {
+			// to retrieve quantity from cart database
 			const qty = await getQuantity(x, username);
 			if (qty != undefined && data[x] > 0) {
 				if (qty.quantity - data[x] <= 0) {
-					console.log("ada nih");
 					conn.query(`DELETE FROM cart WHERE product_id = '${x}' AND username = '${username}'`, err => {
 						if (err) throw err;
 					});
@@ -105,9 +106,11 @@ module.exports = {
 		});
 	},
 	checkout: async username => {
+		// to retrieve a detail of product_id and quantity in cart
 		const cartList = await getCartList(username);
 		let stockEmpty = [];
 		for (const x in cartList) {
+			// to check if stock is available or not
 			const stock = await checkStock(cartList[x].product_id, cartList[x].quantity);
 			if (stock !== false) {
 				conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {

@@ -24,6 +24,14 @@ function checkPassword(username, password) {
 		});
 	});
 }
+function checkAdmin(username) {
+	return new Promise(resolve => {
+		conn.query(`SELECT superuser, password FROM user WHERE username = '${username}'`, (err, data) => {
+			if (err) throw err;
+			resolve(data[0].superuser);
+		});
+	});
+}
 function hash(password) {
 	return new Promise(resolve => {
 		bcrypt.hash(password, 10, function(err, hash) {
@@ -35,10 +43,12 @@ function hash(password) {
 
 module.exports = {
 	login: async (username, password) => {
+		// check if username exist or not
 		if (await checkUsername(username)) {
+			// check if password is match with username
 			if (await checkPassword(username, password)) {
 				return new Promise(resolve => {
-					resolve(jwt.sign({ username: username }, "secret"));
+					resolve(jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: 60 * 30 }));
 				});
 			}
 		}

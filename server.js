@@ -6,9 +6,9 @@ const router = require("./src/routes/index.js");
 const cors = require("cors");
 require("dotenv").config();
 
+app.use("/public", express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(__dirname + "/src"));
 app.use("/", router);
 app.use(nocache());
 const corsOptions = {
@@ -17,6 +17,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.listen(9999, () => {
-	console.log(`\n Server started on port ${process.env.SERVER_PORT} ...\n`);
+app.listen(process.env.SERVER_PORT, () => {
+	console.log(`\n Server is running on port ${process.env.SERVER_PORT} ...\n`);
 });

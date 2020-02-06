@@ -3,7 +3,7 @@ const category = require("../models/category");
 module.exports = {
 	getCategory: (req, res) => {
 		category.getCategory().then(result => {
-			res.json(result);
+			res.json({ total_categories: result.length, category_list: result });
 		});
 	},
 	insertCategory: (req, res) => {
