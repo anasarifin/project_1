@@ -21,36 +21,37 @@ function filter(data1, data2) {
 
 module.exports = {
 	getCart: (req, res) => {
-		const username = req.params.username;
-		const page = req.params.page;
-		const sort = req.params.sort;
-		user.getCart(username, page, sort).then(resolve => {
-			res.json(helper(resolve));
+		const query = { username: req.params.username || req.username, ...req.query };
+		user.getCart(query).then(resolve => {
+			res.json(resolve);
 		});
 	},
 	addCart: (req, res) => {
-		const username = req.username;
-		const data = req.body;
-		const admin = req.admin;
-		console.log(admin);
-		user.addCart(username, data).then(() => {
-			res.redirect(301, "/api/v1/user/" + username);
+		const query = {
+			username: req.username,
+			id: req.body.id,
+			qty: req.body.qty,
+		};
+		user.addCart(query).then(() => {
+			res.redirect(301, "/api/v1/user");
 		});
 	},
 	reduceCart: (req, res) => {
-		const username = req.username;
-		const data = req.body;
-		user.reduceCart(username, data).then(() => {
-			res.redirect(301, "/api/v1/user/" + username);
+		const query = {
+			username: req.username,
+			id: req.body.id,
+			qty: req.body.qty,
+		};
+		user.reduceCart(query).then(() => {
+			res.redirect(301, "/api/v1/user");
 		});
 	},
 	checkout: (req, res) => {
-		const username = req.username;
-		user.getCart(username).then(resolve => {
+		user.getCart(req.username).then(resolve => {
 			resolve[1].forEach(x => {
 				delete x.updated_at;
 			});
-			user.checkout(username).then(async resolve2 => {
+			user.checkout(req.username).then(async resolve2 => {
 				resolve2.forEach(x => {
 					delete x.updated_at;
 				});

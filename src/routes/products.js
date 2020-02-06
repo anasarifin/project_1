@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const products = require("../controllers/products");
 const multer = require("multer");
+const path = require("path");
 const storage = multer.diskStorage({
 	destination: function(req, file, callback) {
 		callback(null, "./public/img");
@@ -9,14 +10,19 @@ const storage = multer.diskStorage({
 		callback(null, file.originalname);
 	},
 });
-const upload = multer({ storage });
+const upload = multer({
+	fileFilter: function(req, file, callback) {
+		var ext = path.extname(file.originalname);
+		if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
+			return callback(new Error("Only images are allowed"));
+		}
+		callback(null, true);
+	},
+	storage: storage,
+	limits: { fileSize: 1024 },
+});
 
 router.get("/products", products.getProducts);
-router.get("/products/:page", products.getProducts);
-router.get("/products/sort/:sort", products.getProducts);
-router.get("/products/sort/:sort/:desc", products.getProducts);
-router.get("/products/search/:search", products.getProducts);
-router.get("/product/:id", products.getOneProduct);
 router.post("/products", upload.single("image"), products.insertProduct);
 router.patch("/product/:id", upload.single("image"), products.updateProduct);
 router.delete("/product/:id", products.deleteProduct);

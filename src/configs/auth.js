@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
 	const token = req.headers["user-token"];
 	try {
 		const decoded = jwt.verify(token, process.env.SECRET_KEY);

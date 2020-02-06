@@ -15,9 +15,7 @@ function helper(data) {
 
 module.exports = {
 	getHistory: (req, res) => {
-		const start = req.body.start;
-		const end = req.body.end;
-		history.getHistory(start, end).then(result => {
+		history.getHistory(req.query).then(result => {
 			result.forEach(x => {
 				x.purchased_date = x.updated_at;
 				delete x.updated_at;
