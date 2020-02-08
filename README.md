@@ -57,8 +57,7 @@ Untuk key-nya diisi dengan "user-token" dan valuenya diisi dengan token yg tadi<
 <br />
 Untuk menambah barang ke cart<br />
 http://localhost:9999/user<br />
-Dengan method patch, masukkan key sesuai dengan product id dan valuenya diisi dengan quantity yg ingin ditambah<br />
-Kita bisa melakukan proses ini secara batch, dengan menambah key yg lainnya<br />
+Dengan method patch, masukkan key "id" diisi dengan product id dan key "qty" diisi dengan quantity yg ingin ditambah<br />
 <br />
 Untuk mengurangi barang dari cart<br />
 http://localhost:9999/user<br />
@@ -66,10 +65,6 @@ Pengoperasiannya sama seperti jika ingin menambah barang, hanya saja disini kita
 <br />
 Untuk melihat isi dari cart, bisa menggunakan method get<br />
 http://localhost:9999/user<br />
-<br />
-Jika kita ingin melihat cart milik orang lain<br />
-http://localhost:9999/user/name<br />
-"Name" = nama username yg ingin kita lihat cartnya<br />
 <br />
 Untuk melakukan payment, bisa menggunakan method post<br />
 http://localhost:9999/user<br />
