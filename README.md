@@ -7,20 +7,14 @@
 <br />
 Untuk melihat daftar seluruh product<br />
 http://localhost:9999/products<br />
-<br />
-Untuk melihat daftar seluruh product dengan pagination, 5 products per halaman<br />
-http://localhost:9999/products/1<br />
-"1" = halaman yg ingin anda kunjungi<br />
-<br />
-Untuk melihat daftar seluruh product dengan sorting<br />
-http://localhost:9999/products/sort/type<br />
-"type" = jenis data yg ingin disorting (contoh: name, price, stock, updated_at, dll.)<br />
-Bisa juga melakukan sorting secara descending dengan menambah parameter /desc<br />
-Contoh: http://localhost:9999/products/sort/name/desc<br />
-<br />
-Untuk melakukan pencarian terhadap product dengan keyword tertentu<br />
-http://localhost:9999/products/search/keyword<br />
-"keyword" = keyword yg kita ingin cari berdasarkan nama product<br />
+Untuk melihat daftar seluruh product dengan sorting, pagination, dan search by name<br />
+Bisa dilakukan dengan menambahkan query string
+page = untuk melakukan pagination
+sort = untuk melakukan sorting
+dir = untuk melakukan sorting secara descending
+search = untuk melakukan pencarian
+Contoh : http://localhost:9999/products?search=[keyword]&sort=[type]&page=[page]
+
 <br />
 Untuk melakukan pencarian terhadap product yg memiliki id tertentu<br />
 http://localhost:9999/product/1<br />
