@@ -7,20 +7,14 @@
 <br />
 Untuk melihat daftar seluruh product<br />
 http://localhost:9999/products<br />
-<br />
-Untuk melihat daftar seluruh product dengan pagination, 5 products per halaman<br />
-http://localhost:9999/products/1<br />
-"1" = halaman yg ingin anda kunjungi<br />
-<br />
-Untuk melihat daftar seluruh product dengan sorting<br />
-http://localhost:9999/products/sort/type<br />
-"type" = jenis data yg ingin disorting (contoh: name, price, stock, updated_at, dll.)<br />
-Bisa juga melakukan sorting secara descending dengan menambah parameter /desc<br />
-Contoh: http://localhost:9999/products/sort/name/desc<br />
-<br />
-Untuk melakukan pencarian terhadap product dengan keyword tertentu<br />
-http://localhost:9999/products/search/keyword<br />
-"keyword" = keyword yg kita ingin cari berdasarkan nama product<br />
+Untuk melihat daftar seluruh product dengan sorting, pagination, dan search by name<br />
+Bisa dilakukan dengan menambahkan query string
+page = untuk melakukan pagination
+sort = untuk melakukan sorting
+dir = untuk melakukan sorting secara descending
+search = untuk melakukan pencarian
+Contoh : http://localhost:9999/products?search=[keyword]&sort=[type]&page=[page]
+
 <br />
 Untuk melakukan pencarian terhadap product yg memiliki id tertentu<br />
 http://localhost:9999/product/1<br />
@@ -63,8 +57,7 @@ Untuk key-nya diisi dengan "user-token" dan valuenya diisi dengan token yg tadi<
 <br />
 Untuk menambah barang ke cart<br />
 http://localhost:9999/user<br />
-Dengan method patch, masukkan key sesuai dengan product id dan valuenya diisi dengan quantity yg ingin ditambah<br />
-Kita bisa melakukan proses ini secara batch, dengan menambah key yg lainnya<br />
+Dengan method patch, masukkan key "id" diisi dengan product id dan key "qty" diisi dengan quantity yg ingin ditambah<br />
 <br />
 Untuk mengurangi barang dari cart<br />
 http://localhost:9999/user<br />
@@ -72,10 +65,6 @@ Pengoperasiannya sama seperti jika ingin menambah barang, hanya saja disini kita
 <br />
 Untuk melihat isi dari cart, bisa menggunakan method get<br />
 http://localhost:9999/user<br />
-<br />
-Jika kita ingin melihat cart milik orang lain<br />
-http://localhost:9999/user/name<br />
-"Name" = nama username yg ingin kita lihat cartnya<br />
 <br />
 Untuk melakukan payment, bisa menggunakan method post<br />
 http://localhost:9999/user<br />
