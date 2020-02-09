@@ -2,16 +2,18 @@ const conn = require("../configs/database");
 
 module.exports = {
 	getProducts: query => {
-		let page = query.page ? "LIMIT " + (query.page * 5 - 5) + ", 5" : "";
-		let dir = query.dir ? "DESC" : "ASC";
-		let sort = query.sort || "id";
-		let name = query.name ? "WHERE name LIKE '%" + query.name + "%'" : "";
-		let id = query.id ? "WHERE id = '" + query.id + "'" : "";
+		const page = query.page ? "LIMIT " + (query.page * 5 - 5) + ", 5" : "";
+		const dir = query.dir ? "DESC" : "ASC";
+		const sort = query.sort || "name";
+		const name = query.name ? "WHERE name LIKE '%" + query.name + "%'" : "";
+		const id = query.id ? "WHERE id = '" + query.id + "'" : "";
+		const helper = query.name ? "AND " : "WHERE ";
+		const type = query.type ? helper + "category_id = '" + query.type + "'" : "";
 
 		return new Promise(resolve => {
-			conn.query(`SELECT * FROM product ${name} ${id} ORDER BY ${sort} ${dir} ${page}`, (err, result) => {
+			conn.query(`SELECT * FROM product ${name} ${type} ${id} ORDER BY ${sort} ${dir} ${page}`, (err, result) => {
 				if (err) console.log(err);
-				if (!result[0]) result = { Page: "empty" };
+				if (!result[0]) result = { msg: "Page empty..." };
 				resolve(result);
 			});
 		});
