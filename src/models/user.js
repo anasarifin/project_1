@@ -20,7 +20,7 @@ function checkExist(x) {
 		});
 	});
 }
-function getCartList(username) {
+function getCartList() {
 	return new Promise(resolve => {
 		conn.query(`SELECT product_id, quantity FROM cart`, (err, data) => {
 			if (err) console.log(err);
@@ -51,9 +51,9 @@ function outOfStock(id) {
 
 module.exports = {
 	getCart: query => {
-		let page = query.page ? "LIMIT " + (query.page * 5 - 5) + ", 5" : "";
+		// let page = query.page ? "LIMIT " + (query.page * 5 - 5) + ", 5" : "";
 		return new Promise(resolve => {
-			conn.query(`SELECT p.id AS product_id, p.name, p.price, p.stock, c.quantity, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id ${page}`, (err, result) => {
+			conn.query(`SELECT p.id AS product_id, p.name, p.price, p.stock, c.quantity, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id`, (err, result) => {
 				if (err) console.log(err);
 				resolve(result);
 			});
@@ -80,31 +80,37 @@ module.exports = {
 	},
 	reduceCart: async id => {
 		// to retrieve quantity from cart database
-		const qty = await getQuantity(id);
-		if (qty != undefined) {
-			if (qty - 1 <= 0) {
-				conn.query(`DELETE FROM cart WHERE product_id = '${id}'`, err => {
-					if (err) console.log(err);
-				});
-			} else {
-				conn.query(`UPDATE cart SET quantity = '${qty - 1}' WHERE product_id = '${id}'`, err => {
-					if (err) console.log(err);
-				});
+		if (id !== "all") {
+			const qty = await getQuantity(id);
+			if (qty != undefined) {
+				if (qty - 1 <= 0) {
+					conn.query(`DELETE FROM cart WHERE product_id = '${id}'`, err => {
+						if (err) console.log(err);
+					});
+				} else {
+					conn.query(`UPDATE cart SET quantity = '${qty - 1}' WHERE product_id = '${id}'`, err => {
+						if (err) console.log(err);
+					});
+				}
 			}
+			return new Promise(resolve => {
+				resolve("Finish");
+			});
+		} else {
+			conn.query(`TRUNCATE TABLE cart`, err => {
+				if (err) console.log(err);
+			});
 		}
-		return new Promise(resolve => {
-			resolve("Finish");
-		});
 	},
 	checkout: async username => {
 		// to retrieve a detail of product_id and quantity in cart
-		const cartList = await getCartList(username);
+		const cartList = await getCartList();
 		let stockEmpty = [];
 		for (const x in cartList) {
 			// to check if stock is available or not
 			const stock = await checkStock(cartList[x].product_id, cartList[x].quantity);
 			if (stock !== false) {
-				conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
+				conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('contoh', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
 					if (err) console.log(err);
 				});
 				conn.query(`UPDATE product SET stock = ${stock} WHERE id = '${cartList[x].product_id}'`, err => {
@@ -114,7 +120,7 @@ module.exports = {
 				stockEmpty.push(await outOfStock(cartList[x].product_id));
 			}
 		}
-		conn.query(`DELETE FROM cart WHERE username = '${username}'`, err => {
+		conn.query(`TRUNCATE TABLE cart`, err => {
 			if (err) console.log(err);
 		});
 		return new Promise(resolve => {

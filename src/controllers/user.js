@@ -37,21 +37,24 @@ module.exports = {
 		});
 	},
 	checkout: (req, res) => {
-		user.getCart(req.username).then(resolve => {
-			resolve[1].forEach(x => {
-				delete x.updated_at;
-			});
-			user.checkout(req.username).then(async resolve2 => {
-				resolve2.forEach(x => {
-					delete x.updated_at;
-				});
-				const filterBuy = await filter(resolve[1], resolve2);
-				const payment = { status: "Transaction success", purchased_date: new Date().toISOString(), ...helper([username, filterBuy]) };
-				payment.item_bought = payment.item_list;
-				delete payment.item_list;
-				payment.out_of_stock = resolve2;
-				res.json(payment);
-			});
+		user.checkout().then(resolve => {
+			res.json(resolve);
 		});
+		// user.getCart().then(resolve => {
+		// 	resolve[1].forEach(x => {
+		// 		delete x.updated_at;
+		// 	});
+		// 	user.checkout(req.username).then(async resolve2 => {
+		// 		resolve2.forEach(x => {
+		// 			delete x.updated_at;
+		// 		});
+		// 		const filterBuy = await filter(resolve[1], resolve2);
+		// 		const payment = { status: "Transaction success", purchased_date: new Date().toISOString(), ...helper([username, filterBuy]) };
+		// 		payment.item_bought = payment.item_list;
+		// 		delete payment.item_list;
+		// 		payment.out_of_stock = resolve2;
+		// 		res.json(payment);
+		// 	});
+		// });
 	},
 };
