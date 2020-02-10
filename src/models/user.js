@@ -1,10 +1,14 @@
 const conn = require("../configs/database");
 
-function getQuantity(x, username) {
+function getQuantity(id) {
 	return new Promise(resolve => {
-		conn.query(`SELECT quantity FROM cart WHERE product_id = '${x}' AND username = '${username}'`, (err, data) => {
+		conn.query(`SELECT quantity FROM cart WHERE product_id = '${id}'`, (err, data) => {
 			if (err) console.log(err);
-			resolve(data[0]);
+			if (data[0] !== undefined) {
+				resolve(parseFloat(data[0].quantity));
+			} else {
+				resolve(undefined);
+			}
 		});
 	});
 }
@@ -18,7 +22,7 @@ function checkExist(x) {
 }
 function getCartList(username) {
 	return new Promise(resolve => {
-		conn.query(`SELECT product_id, quantity FROM cart WHERE username = '${username}'`, (err, data) => {
+		conn.query(`SELECT product_id, quantity FROM cart`, (err, data) => {
 			if (err) console.log(err);
 			resolve(data);
 		});
@@ -48,28 +52,24 @@ function outOfStock(id) {
 module.exports = {
 	getCart: query => {
 		let page = query.page ? "LIMIT " + (query.page * 5 - 5) + ", 5" : "";
-		let dir = query.dir ? "DESC" : "ASC";
-		let sort = query.sort || "product_id";
-		let type = query.type || "username";
-		let search = query.search ? "AND " + type + " LIKE '%" + query.search + "%'" : "";
 		return new Promise(resolve => {
-			conn.query(`SELECT p.id AS product_id, p.name, p.price, c.quantity, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE username = '${query.username}' ${search} ORDER BY ${sort} ${dir} ${page}`, (err, result) => {
+			conn.query(`SELECT p.id AS product_id, p.name, p.price, c.quantity, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id ${page}`, (err, result) => {
 				if (err) console.log(err);
 				resolve(result);
 			});
 		});
 	},
-	addCart: async query => {
+	addCart: async id => {
 		// check if product id available in database or not
-		if ((await checkExist(query.id)) && query.qty > 0) {
+		if (await checkExist(id)) {
 			// to retrieve quantity from cart database
-			const qtyCompare = await getQuantity(query.id, query.username);
-			if (qtyCompare == undefined) {
-				conn.query(`INSERT INTO cart (username, product_id, quantity) VALUES ('${query.username}', '${query.id}', '${query.qty}')`, (err, result) => {
+			const qty = await getQuantity(id);
+			if (qty == undefined) {
+				conn.query(`INSERT INTO cart (product_id, quantity) VALUES ('${id}', ${1})`, (err, result) => {
 					if (err) console.log(err);
 				});
 			} else {
-				conn.query(`UPDATE cart SET quantity = '${parseFloat(qtyCompare.quantity) + parseFloat(query.qty)}' WHERE username = '${query.username}' AND product_id = '${query.id}'`, (err, result) => {
+				conn.query(`UPDATE cart SET quantity = '${qty + 1}' WHERE product_id = '${id}'`, (err, result) => {
 					if (err) console.log(err);
 				});
 			}
@@ -78,16 +78,16 @@ module.exports = {
 			resolve("Finish");
 		});
 	},
-	reduceCart: async query => {
+	reduceCart: async id => {
 		// to retrieve quantity from cart database
-		const qtyCompare = await getQuantity(query.id, query.username);
-		if (qtyCompare != undefined && query.qty > 0) {
-			if (qtyCompare.quantity - query.qty <= 0) {
-				conn.query(`DELETE FROM cart WHERE product_id = '${query.id}' AND username = '${query.username}'`, err => {
+		const qty = await getQuantity(id);
+		if (qty != undefined) {
+			if (qty - 1 <= 0) {
+				conn.query(`DELETE FROM cart WHERE product_id = '${id}'`, err => {
 					if (err) console.log(err);
 				});
 			} else {
-				conn.query(`UPDATE cart SET quantity = '${parseFloat(qtyCompare.quantity) - parseFloat(query.qty)}' WHERE username = '${query.username}' AND product_id = '${query.id}'`, err => {
+				conn.query(`UPDATE cart SET quantity = '${qty - 1}' WHERE product_id = '${id}'`, err => {
 					if (err) console.log(err);
 				});
 			}

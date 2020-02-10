@@ -27,23 +27,13 @@ module.exports = {
 		});
 	},
 	addCart: (req, res) => {
-		const query = {
-			username: req.username,
-			id: req.body.id,
-			qty: req.body.qty,
-		};
-		user.addCart(query).then(() => {
-			res.redirect(301, "/api/v1/user");
+		user.addCart(req.body.id).then(() => {
+			res.redirect(301, "/api/v1/cart");
 		});
 	},
 	reduceCart: (req, res) => {
-		const query = {
-			username: req.username,
-			id: req.body.id,
-			qty: req.body.qty,
-		};
-		user.reduceCart(query).then(() => {
-			res.redirect(301, "/api/v1/user");
+		user.reduceCart(req.body.id).then(() => {
+			res.redirect(301, "/api/v1/cart");
 		});
 	},
 	checkout: (req, res) => {

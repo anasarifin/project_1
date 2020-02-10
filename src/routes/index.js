@@ -6,7 +6,7 @@ const login = require("./login");
 const history = require("./history");
 router.use("/", products);
 router.use("/category", category);
-router.use("/user", user);
+router.use("/cart", user);
 router.use("/", login);
 router.use("/history", history);
 
