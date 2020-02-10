@@ -53,7 +53,7 @@ module.exports = {
 	getCart: query => {
 		let page = query.page ? "LIMIT " + (query.page * 5 - 5) + ", 5" : "";
 		return new Promise(resolve => {
-			conn.query(`SELECT p.id AS product_id, p.name, p.price, c.quantity, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id ${page}`, (err, result) => {
+			conn.query(`SELECT p.id AS product_id, p.name, p.price, p.stock, c.quantity, p.category_id, p.description, c.updated_at FROM cart c LEFT JOIN product p ON c.product_id = p.id ${page}`, (err, result) => {
 				if (err) console.log(err);
 				resolve(result);
 			});

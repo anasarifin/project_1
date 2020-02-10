@@ -28,12 +28,12 @@ module.exports = {
 	},
 	addCart: (req, res) => {
 		user.addCart(req.body.id).then(() => {
-			res.redirect(301, "/api/v1/cart");
+			res.json("Success");
 		});
 	},
 	reduceCart: (req, res) => {
 		user.reduceCart(req.body.id).then(() => {
-			res.redirect(301, "/api/v1/cart");
+			res.json("Success");
 		});
 	},
 	checkout: (req, res) => {
