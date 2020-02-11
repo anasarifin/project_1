@@ -7,24 +7,16 @@ const storage = multer.diskStorage({
 		callback(null, "./public/img");
 	},
 	filename: function(req, file, callback) {
-		callback(null, file.originalname);
+		callback(null, new Date().toISOString().replace(/:/g, "-") + file.originalname);
 	},
 });
 const upload = multer({
-	fileFilter: function(req, file, callback) {
-		var ext = path.extname(file.originalname);
-		if (ext !== ".png" && ext !== ".jpg" && ext !== ".gif" && ext !== ".jpeg") {
-			return callback(new Error("Only images are allowed"));
-		}
-		callback(null, true);
-	},
 	storage: storage,
-	limits: { fileSize: 1024 },
 });
 
 router.get("/products", products.getProducts);
 router.post("/products", upload.single("image"), products.insertProduct);
-router.patch("/product/:id", upload.single("image"), products.updateProduct);
-router.delete("/product/:id", products.deleteProduct);
+router.patch("/products/:id", upload.single("image"), products.updateProduct);
+router.delete("/products/:id", products.deleteProduct);
 
 module.exports = router;

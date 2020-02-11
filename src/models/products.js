@@ -2,7 +2,7 @@ const conn = require("../configs/database");
 
 module.exports = {
 	getProducts: query => {
-		const page = query.page ? "LIMIT " + (query.page * 5 - 5) + ", 5" : "";
+		const page = query.page ? "LIMIT " + (query.page * 8 - 8) + ", 8" : "";
 		const dir = query.dir ? "DESC" : "ASC";
 		const sort = query.sort || "name";
 		const name = query.name ? "WHERE name LIKE '%" + query.name + "%'" : "";

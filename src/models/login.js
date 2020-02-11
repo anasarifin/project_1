@@ -48,7 +48,7 @@ module.exports = {
 			// check if password is match with username
 			if (await checkPassword(username, password)) {
 				return new Promise(resolve => {
-					resolve(jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: 60 * 30 }));
+					resolve(jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: 240 * 60 }));
 				});
 			}
 		}
