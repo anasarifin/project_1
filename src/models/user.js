@@ -103,14 +103,16 @@ module.exports = {
 		}
 	},
 	checkout: async username => {
+		console.log(username);
 		// to retrieve a detail of product_id and quantity in cart
 		const cartList = await getCartList();
 		let stockEmpty = [];
 		for (const x in cartList) {
 			// to check if stock is available or not
 			const stock = await checkStock(cartList[x].product_id, cartList[x].quantity);
+			console.log(stock);
 			if (stock !== false) {
-				conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('contoh', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
+				conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
 					if (err) console.log(err);
 				});
 				conn.query(`UPDATE product SET stock = ${stock} WHERE id = '${cartList[x].product_id}'`, err => {

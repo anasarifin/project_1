@@ -37,7 +37,7 @@ module.exports = {
 		});
 	},
 	checkout: (req, res) => {
-		user.checkout().then(resolve => {
+		user.checkout(req.body.username).then(resolve => {
 			res.json(resolve);
 		});
 		// user.getCart().then(resolve => {
