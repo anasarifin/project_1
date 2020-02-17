@@ -59,74 +59,74 @@ module.exports = {
 			});
 		});
 	},
-	addCart: async id => {
+	addCart: async body => {
 		// check if product id available in database or not
-		if (await checkExist(id)) {
+		if (await checkExist(body.id)) {
 			// to retrieve quantity from cart database
-			const qty = await getQuantity(id);
+			const qty = await getQuantity(body.id);
 			if (qty == undefined) {
-				conn.query(`INSERT INTO cart (product_id, quantity) VALUES ('${id}', ${1})`, (err, result) => {
-					if (err) console.log(err);
+				return new Promise(resolve => {
+					conn.query(`INSERT INTO cart (product_id, quantity) VALUES ('${body.id}', ${body.qty})`, (err, result) => {
+						if (err) console.log(err);
+						resolve(result);
+					});
 				});
 			} else {
-				conn.query(`UPDATE cart SET quantity = '${qty + 1}' WHERE product_id = '${id}'`, (err, result) => {
-					if (err) console.log(err);
+				return new Promise(resolve => {
+					conn.query(`UPDATE cart SET quantity = '${qty + parseFloat(body.qty)}' WHERE product_id = '${body.id}'`, (err, result) => {
+						if (err) console.log(err);
+						resolve(result);
+					});
 				});
 			}
 		}
-		return new Promise(resolve => {
-			resolve("Finish");
-		});
 	},
-	reduceCart: async id => {
+	reduceCart: async body => {
 		// to retrieve quantity from cart database
-		if (id !== "all") {
-			const qty = await getQuantity(id);
+		if (body.id !== "all") {
+			const qty = await getQuantity(body.id);
 			if (qty != undefined) {
-				if (qty - 1 <= 0) {
-					conn.query(`DELETE FROM cart WHERE product_id = '${id}'`, err => {
-						if (err) console.log(err);
+				if (qty - body.qty <= 0) {
+					return new Promise(resolve => {
+						conn.query(`DELETE FROM cart WHERE product_id = '${body.id}'`, (err, result) => {
+							if (err) console.log(err);
+							resolve(result);
+						});
 					});
 				} else {
-					conn.query(`UPDATE cart SET quantity = '${qty - 1}' WHERE product_id = '${id}'`, err => {
-						if (err) console.log(err);
+					return new Promise(resolve => {
+						conn.query(`UPDATE cart SET quantity = '${qty - parseFloat(body.qty)}' WHERE product_id = '${body.id}'`, (err, result) => {
+							if (err) console.log(err);
+							resolve(result);
+						});
 					});
 				}
 			}
-			return new Promise(resolve => {
-				resolve("Finish");
-			});
 		} else {
 			conn.query(`TRUNCATE TABLE cart`, err => {
 				if (err) console.log(err);
 			});
 		}
 	},
-	checkout: async username => {
-		console.log(username);
-		// to retrieve a detail of product_id and quantity in cart
-		const cartList = await getCartList();
-		let stockEmpty = [];
-		for (const x in cartList) {
+	checkout: async (username, data, order) => {
+		for (const x in data) {
 			// to check if stock is available or not
-			const stock = await checkStock(cartList[x].product_id, cartList[x].quantity);
+			const stock = await checkStock(data[x].id, order[x]);
 			console.log(stock);
 			if (stock !== false) {
-				conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${cartList[x].product_id}', '${cartList[x].quantity}')`, err => {
+				conn.query(`INSERT INTO history (username, product_id, quantity) VALUES ('${username}', '${data[x].id}', '${order[x]}')`, err => {
 					if (err) console.log(err);
 				});
-				conn.query(`UPDATE product SET stock = ${stock} WHERE id = '${cartList[x].product_id}'`, err => {
+				conn.query(`UPDATE product SET stock = '${stock}' WHERE id = '${data[x].id}'`, err => {
 					if (err) console.log(err);
 				});
-			} else if (stock === false) {
-				stockEmpty.push(await outOfStock(cartList[x].product_id));
 			}
 		}
 		conn.query(`TRUNCATE TABLE cart`, err => {
 			if (err) console.log(err);
 		});
 		return new Promise(resolve => {
-			resolve(stockEmpty);
+			resolve("Success");
 		});
 	},
 };

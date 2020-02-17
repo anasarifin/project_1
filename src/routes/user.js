@@ -3,8 +3,8 @@ const user = require("../controllers/user");
 const auth = require("../configs/auth.js");
 
 router.get("/", user.getCart);
-router.patch("/", user.addCart);
-router.delete("/", user.reduceCart);
-router.post("/", user.checkout);
+router.patch("/", auth, user.addCart);
+router.delete("/", auth, user.reduceCart);
+router.post("/", auth, user.checkout);
 
 module.exports = router;

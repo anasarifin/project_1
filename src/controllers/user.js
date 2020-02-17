@@ -27,17 +27,20 @@ module.exports = {
 		});
 	},
 	addCart: (req, res) => {
-		user.addCart(req.body.id).then(() => {
+		user.addCart(req.body).then(() => {
 			res.json("Success");
 		});
 	},
 	reduceCart: (req, res) => {
-		user.reduceCart(req.body.id).then(() => {
+		user.reduceCart(req.body).then(() => {
 			res.json("Success");
 		});
 	},
 	checkout: (req, res) => {
-		user.checkout(req.body.username).then(resolve => {
+		const username = req.username;
+		const data = req.body.data;
+		const order = req.body.order;
+		user.checkout(username, data, order).then(resolve => {
 			res.json(resolve);
 		});
 		// user.getCart().then(resolve => {
