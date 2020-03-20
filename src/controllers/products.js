@@ -1,5 +1,4 @@
 const products = require("../models/products.js");
-const wew = "wew";
 module.exports = {
 	getProducts: (req, res) => {
 		products.getProducts(req.query).then(result => {
@@ -34,7 +33,7 @@ module.exports = {
 			description: description,
 			price: parseFloat(price),
 			stock: parseFloat(stock),
-			image: req.file ? "http://localhost:9999/public/img/" + req.file.filename : image,
+			image: req.file ? req.file.filename : image,
 			category_id: parseFloat(category_id),
 		};
 		products.insertProduct(data).then(result => {
@@ -49,7 +48,7 @@ module.exports = {
 			description: description,
 			price: parseFloat(price),
 			stock: parseFloat(stock),
-			image: req.file ? "http://localhost:9999/public/img/" + req.file.filename : image,
+			image: req.file ? req.file.filename : image,
 			category_id: parseFloat(category_id),
 		};
 		products.updateProduct(id, data).then(result => {
